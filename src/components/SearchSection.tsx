@@ -2,6 +2,8 @@ import { MapPin, FileText, CreditCard, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const popularLocations = [
   "Manchester",
@@ -13,6 +15,15 @@ const popularLocations = [
 ];
 
 export const SearchSection = () => {
+  const navigate = useNavigate();
+  const [locationSearch, setLocationSearch] = useState("");
+  const [businessSearch, setBusinessSearch] = useState("");
+  const [licenseSearch, setLicenseSearch] = useState("");
+
+  const handleSearch = (query: string) => {
+    navigate(`/search-results?q=${encodeURIComponent(query)}`);
+  };
+
   return (
     <section className="bg-primary py-16">
       <div className="container mx-auto px-4 max-w-4xl">
@@ -47,8 +58,18 @@ export const SearchSection = () => {
                 <Input
                   placeholder="Enter town, city, or postcode..."
                   className="flex-1"
+                  value={locationSearch}
+                  onChange={(e) => setLocationSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && locationSearch.trim()) {
+                      handleSearch(locationSearch);
+                    }
+                  }}
                 />
-                <Button className="bg-secondary hover:bg-secondary/90">
+                <Button 
+                  className="bg-secondary hover:bg-secondary/90"
+                  onClick={() => locationSearch.trim() && handleSearch(locationSearch)}
+                >
                   <Search className="w-4 h-4 mr-2" />
                   Search
                 </Button>
@@ -59,8 +80,18 @@ export const SearchSection = () => {
                 <Input
                   placeholder="Enter business name..."
                   className="flex-1"
+                  value={businessSearch}
+                  onChange={(e) => setBusinessSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && businessSearch.trim()) {
+                      handleSearch(businessSearch);
+                    }
+                  }}
                 />
-                <Button className="bg-secondary hover:bg-secondary/90">
+                <Button 
+                  className="bg-secondary hover:bg-secondary/90"
+                  onClick={() => businessSearch.trim() && handleSearch(businessSearch)}
+                >
                   <Search className="w-4 h-4 mr-2" />
                   Search
                 </Button>
@@ -71,8 +102,18 @@ export const SearchSection = () => {
                 <Input
                   placeholder="Enter license number..."
                   className="flex-1"
+                  value={licenseSearch}
+                  onChange={(e) => setLicenseSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && licenseSearch.trim()) {
+                      handleSearch(licenseSearch);
+                    }
+                  }}
                 />
-                <Button className="bg-secondary hover:bg-secondary/90">
+                <Button 
+                  className="bg-secondary hover:bg-secondary/90"
+                  onClick={() => licenseSearch.trim() && handleSearch(licenseSearch)}
+                >
                   <Search className="w-4 h-4 mr-2" />
                   Search
                 </Button>
@@ -87,6 +128,7 @@ export const SearchSection = () => {
             {popularLocations.map((location) => (
               <button
                 key={location}
+                onClick={() => handleSearch(location)}
                 className="flex items-center gap-1 text-white hover:text-secondary transition-colors"
               >
                 <MapPin className="w-4 h-4" />

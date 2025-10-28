@@ -48,7 +48,14 @@ const SearchResults = () => {
                 </p>
               </div>
 
-              <Button className="mt-6 bg-primary hover:bg-primary/90">
+              <Button 
+                className="mt-6 bg-primary hover:bg-primary/90"
+                onClick={() => {
+                  document.getElementById('directory-section')?.scrollIntoView({ 
+                    behavior: 'smooth' 
+                  });
+                }}
+              >
                 Browse Directory
               </Button>
             </div>

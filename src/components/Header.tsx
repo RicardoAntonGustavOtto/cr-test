@@ -14,7 +14,7 @@ const Header = () => {
         </Link>
         
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/directory" className="text-foreground hover:text-primary transition-colors">
+          <Link to="/search-results" className="text-foreground hover:text-primary transition-colors">
             Directory
           </Link>
           <Link to="/resources" className="text-foreground hover:text-primary transition-colors">

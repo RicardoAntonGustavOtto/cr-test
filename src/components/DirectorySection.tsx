@@ -1,5 +1,6 @@
 import { Search, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,8 +27,9 @@ export const DirectorySection = () => {
   const handleLoadMore = () => {
     setOffset(prev => prev + limit);
   };
+  
   return (
-    <section className="bg-primary py-12">
+    <section id="directory-section" className="bg-primary py-12">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
@@ -80,27 +82,33 @@ export const DirectorySection = () => {
           <>
             <div className="grid gap-6">
               {carriers.map((carrier, index) => (
-                <Card key={carrier.registrationNumber + index}>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle className="text-xl mb-2">{carrier.name}</CardTitle>
-                        <p className="text-sm text-muted-foreground">
-                          Registration: {carrier.registrationNumber}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {carrier.address}
-                        </p>
+                <Link 
+                  key={carrier.registrationNumber + index}
+                  to={`/provider/${carrier.registrationNumber}`}
+                  className="block transition-transform hover:scale-[1.02]"
+                >
+                  <Card className="cursor-pointer hover:shadow-lg">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="text-xl mb-2">{carrier.name}</CardTitle>
+                          <p className="text-sm text-muted-foreground">
+                            Registration: {carrier.registrationNumber}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {carrier.address}
+                          </p>
+                        </div>
+                        <Badge className="bg-secondary">Upper Tier</Badge>
                       </div>
-                      <Badge className="bg-secondary">Upper Tier</Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                      {carrier.registrationType}
-                    </p>
-                  </CardContent>
-                </Card>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground">
+                        {carrier.registrationType}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
 
