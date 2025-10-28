@@ -54,83 +54,87 @@ export const DirectorySection = () => {
   };
   
   return (
-    <section id="directory-section" className="bg-primary py-16">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 text-center">
-            UK Licensed Rubbish Removal Directory
-          </h1>
-          <p className="text-white/90 text-lg mb-6 text-center">
-            {carriers.length > 0 ? `${carriers.length}+ licensed rubbish removal services found` : 'Search for licensed rubbish removal services'}
-            {searchQuery && <> in {searchQuery}</>}
-          </p>
+    <>
+      <section id="directory-section" className="bg-primary py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto mb-10">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 text-center">
+              UK Licensed Rubbish Removal Directory
+            </h1>
+            <p className="text-white/90 text-lg mb-6 text-center">
+              {carriers.length > 0 ? `${carriers.length}+ licensed rubbish removal services found` : 'Search for licensed rubbish removal services'}
+              {searchQuery && <> in {searchQuery}</>}
+            </p>
 
-          <div className="bg-white rounded-lg shadow-lg p-2 mb-4">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <div className="hidden sm:block">
-                <Select value={searchType} onValueChange={setSearchType}>
-                  <SelectTrigger className="w-[180px] h-12 bg-white border-gray-300">
-                    <MapPin className="w-4 h-4 mr-2 text-gray-500" />
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="location">Location</SelectItem>
-                    <SelectItem value="business">Business Name</SelectItem>
-                    <SelectItem value="registration">Registration No.</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="flex-1 relative">
-                <MapPin className="w-[18px] h-[18px] absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" />
-                <Input
-                  placeholder="Enter town, city or postcode"
-                  className="h-12 pl-10 bg-white border-gray-300 text-foreground placeholder:text-gray-400"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleSearch();
-                    }
-                  }}
-                />
-              </div>
+            <div className="bg-white rounded-lg shadow-lg p-2 mb-4">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="hidden sm:block">
+                  <Select value={searchType} onValueChange={setSearchType}>
+                    <SelectTrigger className="w-[180px] h-12 bg-white border-gray-300">
+                      <MapPin className="w-4 h-4 mr-2 text-gray-500" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="location">Location</SelectItem>
+                      <SelectItem value="business">Business Name</SelectItem>
+                      <SelectItem value="registration">Registration No.</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex-1 relative">
+                  <MapPin className="w-[18px] h-[18px] absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" />
+                  <Input
+                    placeholder="Enter town, city or postcode"
+                    className="h-12 pl-10 bg-white border-gray-300 text-foreground placeholder:text-gray-400"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSearch();
+                      }
+                    }}
+                  />
+                </div>
 
-              <Button 
-                className="h-12 bg-secondary hover:bg-secondary/90 text-white px-8"
-                onClick={handleSearch}
-                disabled={loading}
-              >
-                <Search className="w-[18px] h-[18px] mr-2" />
-                Search
-              </Button>
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm text-white/90 mb-2 font-medium">Filter by Services:</p>
-            <div className="flex flex-wrap gap-2">
-              {serviceFilters.map((filter) => (
-                <Badge
-                  key={filter}
-                  className={`cursor-pointer transition-colors rounded-full text-xs font-semibold ${
-                    selectedFilters.includes(filter) 
-                      ? "bg-secondary text-white hover:bg-secondary/90" 
-                      : "bg-white text-gray-600 hover:bg-secondary/50 border-0"
-                  }`}
-                  onClick={() => toggleFilter(filter)}
+                <Button 
+                  className="h-12 bg-secondary hover:bg-secondary/90 text-white px-8"
+                  onClick={handleSearch}
+                  disabled={loading}
                 >
-                  {filter}
-                </Badge>
-              ))}
+                  <Search className="w-[18px] h-[18px] mr-2" />
+                  Search
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm text-white/90 mb-2 font-medium">Filter by Services:</p>
+              <div className="flex flex-wrap gap-2">
+                {serviceFilters.map((filter) => (
+                  <Badge
+                    key={filter}
+                    className={`cursor-pointer transition-colors rounded-full text-xs font-semibold ${
+                      selectedFilters.includes(filter) 
+                        ? "bg-secondary text-white hover:bg-secondary/90" 
+                        : "bg-white text-gray-600 hover:bg-secondary/50 border-0"
+                    }`}
+                    onClick={() => toggleFilter(filter)}
+                  >
+                    {filter}
+                  </Badge>
+                ))}
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-background py-8">
+        <div className="container mx-auto px-4">
           {loading && offset === 0 ? (
             <div className="flex justify-center items-center py-20">
-              <Loader2 className="w-10 h-10 animate-spin text-white" />
+              <Loader2 className="w-10 h-10 animate-spin text-muted-foreground" />
             </div>
           ) : carriers.length === 0 ? (
             <div className="bg-white rounded-lg shadow-lg p-12 text-center">
@@ -295,7 +299,7 @@ export const DirectorySection = () => {
             </div>
           )}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
