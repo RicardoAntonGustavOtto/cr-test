@@ -46,29 +46,28 @@ export const useWasteCarrierDetail = (registrationNumber: string) => {
           throw new Error('Carrier not found');
         }
 
-        // Helper function to extract string value from API response
-        const extractValue = (field: any): string => {
-          if (typeof field === 'string') return field;
-          if (field?.label) return field.label;
-          if (field?.['@id']) return field['@id'];
-          return '';
-        };
-
-        const regNumber = extractValue(item.registrationNumber || item.registration?.registrationNumber) || registrationNumber;
+        const regNumber = item.registrationNumber || registrationNumber;
         const tier = regNumber.startsWith('CBDU') ? 'Upper' : 'Lower';
+        
+        const holderName = item.holder?.name || 'Unknown';
+        const companyNumber = item.holder?.companyNumber || '';
+        const siteAddress = item.site?.siteAddress;
+        const fullAddress = siteAddress?.address || 'Address not available';
+        const postcode = siteAddress?.postcode || '';
+        const registrationType = item.registrationType?.label || 'Carrier, Broker, Dealer';
 
         setCarrier({
           registrationNumber: regNumber,
-          name: extractValue(item.name || item.businessName) || 'Unknown',
-          address: extractValue(item.address || item.postalAddress) || 'Address not available',
-          postcode: extractValue(item.postcode) || '',
-          registrationType: extractValue(item.registrationType) || 'Carrier, Broker, Dealer',
+          name: holderName,
+          address: fullAddress,
+          postcode: postcode,
+          registrationType: registrationType,
           tier,
-          registrationDate: extractValue(item.registrationDate || item.dateRegistered),
-          expiryDate: extractValue(item.expiryDate || item.dateExpires),
-          companyNumber: extractValue(item.companyNumber),
-          phone: extractValue(item.phoneNumber || item.phone),
-          email: extractValue(item.email || item.emailAddress),
+          registrationDate: item.registrationDate || '',
+          expiryDate: item.expiryDate || '',
+          companyNumber: companyNumber,
+          phone: '',
+          email: '',
         });
       } catch (err) {
         console.error('Error fetching carrier detail:', err);

@@ -52,26 +52,25 @@ export const useWasteCarriers = ({
         // Filter for Upper Tier only (registration numbers starting with CBDU)
         const items = data.items || [];
         
-        // Helper function to extract string value from API response (handles both plain strings and objects with label)
-        const extractValue = (field: any): string => {
-          if (typeof field === 'string') return field;
-          if (field?.label) return field.label;
-          if (field?.['@id']) return field['@id'];
-          return '';
-        };
-        
         const upperTierCarriers = items
           .filter((item: any) => {
-            const regNumber = extractValue(item.registrationNumber || item.registration?.registrationNumber);
+            const regNumber = item.registrationNumber || '';
             return regNumber.startsWith('CBDU');
           })
-          .map((item: any) => ({
-            registrationNumber: extractValue(item.registrationNumber || item.registration?.registrationNumber) || 'N/A',
-            name: extractValue(item.name || item.businessName) || 'Unknown',
-            address: extractValue(item.address || item.postalAddress) || 'Address not available',
-            registrationType: extractValue(item.registrationType) || 'Carrier, Broker, Dealer - Upper Tier',
-            tier: 'Upper' as const,
-          }));
+          .map((item: any) => {
+            const holderName = item.holder?.name || 'Unknown';
+            const siteAddress = item.site?.siteAddress;
+            const fullAddress = siteAddress?.address || 'Address not available';
+            const registrationType = item.registrationType?.label || 'Carrier, Broker, Dealer';
+            
+            return {
+              registrationNumber: item.registrationNumber || 'N/A',
+              name: holderName,
+              address: fullAddress,
+              registrationType: registrationType,
+              tier: 'Upper' as const,
+            };
+          });
 
         setCarriers(upperTierCarriers);
         setTotal(upperTierCarriers.length);
