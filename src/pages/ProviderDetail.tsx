@@ -56,13 +56,21 @@ const ProviderDetail = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Registration: {carrier.registrationNumber}</p>
-                    <p className="text-sm text-muted-foreground mt-1">{carrier.address}</p>
+                    <p className="text-sm font-semibold text-foreground">Registration Number</p>
+                    <p className="text-sm text-muted-foreground mt-1">{carrier.registrationNumber}</p>
                   </div>
                   
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Registration Type</h3>
-                    <p className="text-sm text-muted-foreground">{carrier.registrationType}</p>
+                    <p className="text-sm font-semibold text-foreground">Address</p>
+                    <p className="text-sm text-muted-foreground mt-1">{carrier.address}</p>
+                    {carrier.postcode && (
+                      <p className="text-sm text-muted-foreground">{carrier.postcode}</p>
+                    )}
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">Registration Type</p>
+                    <p className="text-sm text-muted-foreground mt-1">{carrier.registrationType}</p>
                   </div>
                 </CardContent>
               </Card>
