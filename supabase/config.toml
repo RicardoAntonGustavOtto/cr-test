@@ -1,0 +1,4 @@
+project_id = "njlfqzktdtmqwoipuyxp"
+
+[functions.waste-carriers-proxy]
+verify_jwt = false

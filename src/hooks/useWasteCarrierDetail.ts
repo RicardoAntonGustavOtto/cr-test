@@ -31,9 +31,9 @@ export const useWasteCarrierDetail = (registrationNumber: string) => {
       setError(null);
 
       try {
-        const url = `https://environment.data.gov.uk/public-register/waste-carriers-brokers/registration/${registrationNumber}.json`;
+        const proxyUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/waste-carriers-proxy?registrationNumber=${registrationNumber}`;
         
-        const response = await fetch(url);
+        const response = await fetch(proxyUrl);
         
         if (!response.ok) {
           throw new Error('Carrier not found');

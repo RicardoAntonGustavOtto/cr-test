@@ -28,7 +28,7 @@ export const useWasteCarriers = ({
     const fetchCarriers = async () => {
       setLoading(true);
       try {
-        // Build the API URL with parameters
+        // Build the API URL with parameters for our proxy
         const params = new URLSearchParams({
           _limit: limit.toString(),
           _offset: offset.toString(),
@@ -39,9 +39,9 @@ export const useWasteCarriers = ({
           params.append('name-search', searchQuery);
         }
 
-        const url = `https://environment.data.gov.uk/public-register/waste-carriers-brokers/registration.json?${params}`;
+        const proxyUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/waste-carriers-proxy?${params}`;
         
-        const response = await fetch(url);
+        const response = await fetch(proxyUrl);
         
         if (!response.ok) {
           throw new Error('Failed to fetch waste carriers');
