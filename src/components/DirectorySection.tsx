@@ -80,35 +80,54 @@ export const DirectorySection = () => {
           </Card>
         ) : (
           <>
-            <div className="grid gap-6">
+            <div className="bg-white rounded-lg p-6 mb-6">
+              <p className="text-foreground font-semibold">
+                Found {carriers.length} approved waste carriers
+                {searchQuery && <> matching "{searchQuery}"</>}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Available Providers
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {carriers.map((carrier, index) => (
-                <Link 
-                  key={carrier.registrationNumber + index}
-                  to={`/provider/${carrier.registrationNumber}`}
-                  className="block transition-transform hover:scale-[1.02]"
-                >
-                  <Card className="cursor-pointer hover:shadow-lg">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle className="text-xl mb-2">{carrier.name}</CardTitle>
-                          <p className="text-sm text-muted-foreground">
-                            Registration: {carrier.registrationNumber}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {carrier.address}
-                          </p>
-                        </div>
-                        <Badge className="bg-secondary">Upper Tier</Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground">
-                        {carrier.registrationType}
+                <Card key={carrier.registrationNumber + index} className="bg-white hover:shadow-lg transition-shadow">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg font-bold text-foreground">
+                      {carrier.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="text-sm">
+                      <p className="text-muted-foreground">
+                        <span className="font-medium text-foreground">Registration:</span> {carrier.registrationNumber}
                       </p>
-                    </CardContent>
-                  </Card>
-                </Link>
+                      {carrier.expiryDate && (
+                        <p className="text-muted-foreground">
+                          <span className="font-medium text-foreground">Expires:</span> {new Date(carrier.expiryDate).toLocaleDateString('en-GB')}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div className="text-sm pt-2 border-t">
+                      <p className="text-muted-foreground">
+                        <span className="font-medium text-foreground">Address:</span> {carrier.address}
+                      </p>
+                      {carrier.postcode && (
+                        <p className="text-muted-foreground">
+                          <span className="font-medium text-foreground">Postcode:</span> {carrier.postcode}
+                        </p>
+                      )}
+                    </div>
+
+                    <Link to={`/provider/${carrier.registrationNumber}`}>
+                      <Button className="w-full mt-4 bg-primary hover:bg-primary/90">
+                        Claim This Listing
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
               ))}
             </div>
 

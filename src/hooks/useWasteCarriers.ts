@@ -5,8 +5,10 @@ export interface WasteCarrier {
   registrationNumber: string;
   name: string;
   address: string;
+  postcode: string;
   registrationType: string;
   tier: 'Upper' | 'Lower';
+  expiryDate?: string;
 }
 
 interface UseWasteCarriersParams {
@@ -61,14 +63,18 @@ export const useWasteCarriers = ({
             const holderName = item.holder?.name || 'Unknown';
             const siteAddress = item.site?.siteAddress;
             const fullAddress = siteAddress?.address || 'Address not available';
+            const postcode = siteAddress?.postcode || '';
             const registrationType = item.registrationType?.label || 'Carrier, Broker, Dealer';
+            const expiryDate = item.expiryDate || '';
             
             return {
               registrationNumber: item.registrationNumber || 'N/A',
               name: holderName,
               address: fullAddress,
+              postcode: postcode,
               registrationType: registrationType,
               tier: 'Upper' as const,
+              expiryDate: expiryDate,
             };
           });
 
