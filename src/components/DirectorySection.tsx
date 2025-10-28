@@ -127,48 +127,6 @@ export const DirectorySection = () => {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto mb-8">
-          {carriers.length > 0 && (
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h2 className="text-2xl font-bold text-foreground">
-                      Rubbish Removal & Clearance Services: London
-                    </h2>
-                    <Badge className="bg-secondary text-white rounded-md">
-                      ✓ EA Registered
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    All providers are Environment Agency registered for legal waste disposal.
-                  </p>
-                  <p className="text-foreground font-semibold">
-                    Found {carriers.length} approved waste carriers
-                    {searchQuery && <> matching "{searchQuery}"</>}
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Available Providers
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">Sort by:</span>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-40">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="relevant">Most relevant</SelectItem>
-                      <SelectItem value="name">Name A-Z</SelectItem>
-                      <SelectItem value="expiry">Expiry Date</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
         <div className="max-w-7xl mx-auto">
           {loading && offset === 0 ? (
             <div className="flex justify-center items-center py-20">
@@ -181,106 +139,160 @@ export const DirectorySection = () => {
               </p>
             </div>
           ) : (
-            <>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                {carriers.map((carrier, index) => (
-                  <Card key={carrier.registrationNumber + index} className="bg-white hover:shadow-xl transition-all border">
-                    <CardHeader className="pb-4">
-                      <CardTitle className="text-lg font-bold text-foreground leading-tight">
-                        {carrier.name}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="text-sm space-y-1.5">
-                        <p className="text-muted-foreground">
-                          <span className="font-semibold text-foreground">Registration:</span> {carrier.registrationNumber}
-                        </p>
-                        {carrier.expiryDate && (
-                          <p className="text-muted-foreground">
-                            <span className="font-semibold text-foreground">Expires:</span> {new Date(carrier.expiryDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                          </p>
-                        )}
-                      </div>
-                      
-                      <div className="text-sm pt-3 border-t space-y-1.5">
-                        <p className="text-muted-foreground">
-                          <span className="font-semibold text-foreground">Address:</span> {carrier.address}
-                        </p>
-                        {carrier.postcode && (
-                          <>
-                            <p className="text-muted-foreground">
-                              <span className="font-semibold text-foreground">Town:</span> {carrier.address.split(',').slice(-2, -1)[0]?.trim() || 'N/A'}
-                            </p>
-                            <p className="text-muted-foreground">
-                              <span className="font-semibold text-foreground">Postcode:</span> {carrier.postcode}
-                            </p>
-                          </>
-                        )}
-                      </div>
-
-                      <Link to={`/provider/${carrier.registrationNumber}`}>
-                        <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white">
-                          Claim This Listing
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {carriers.length >= limit && (
-                <div className="text-center">
-                  <div className="flex justify-center items-center gap-2 mb-4">
-                    <Button 
-                      variant="outline" 
-                      className="bg-white hover:bg-gray-100 text-foreground px-6"
-                      onClick={() => setOffset(Math.max(0, offset - limit))}
-                      disabled={loading || offset === 0}
+            <div className="container mx-auto px-4 py-6 md:py-8">
+              <div className="max-w-7xl mx-auto bg-white border border-primary/10 rounded-lg p-4 md:p-6 shadow-sm">
+                <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <h2 className="text-xl md:text-2xl font-bold text-primary">
+                        Rubbish Removal & Clearance Services: London
+                      </h2>
+                      <Badge className="bg-secondary text-white rounded-md border-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        EA Registered
+                      </Badge>
+                    </div>
+                    <p className="text-primary/70 text-sm">
+                      All providers are Environment Agency registered for legal waste disposal.
+                    </p>
+                  </div>
+                  <div className="text-sm text-primary/70 mt-3 md:mt-0">
+                    Sort by:
+                    <select 
+                      className="ml-2 border border-primary/20 rounded px-2 py-1 focus:ring-secondary focus:border-secondary"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
                     >
-                      Previous
-                    </Button>
-                    
-                    {[1, 2, 3, 4, 5].map((page) => (
-                      <Button
-                        key={page}
-                        variant={page === 3 ? "default" : "outline"}
-                        className={page === 3 ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-white hover:bg-gray-100 text-foreground"}
-                        onClick={() => setOffset((page - 1) * limit)}
-                        disabled={loading}
-                      >
-                        {page}
-                      </Button>
-                    ))}
-                    
-                    <span className="text-white px-2">...</span>
-                    
-                    <Button
-                      variant="outline"
-                      className="bg-white hover:bg-gray-100 text-foreground"
-                      disabled={loading}
-                    >
-                      331
-                    </Button>
-                    
-                    <Button 
-                      variant="outline" 
-                      className="bg-white hover:bg-gray-100 text-foreground px-6"
-                      onClick={handleLoadMore}
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Loading...
-                        </>
-                      ) : (
-                        'Next'
-                      )}
-                    </Button>
+                      <option value="relevant">Most relevant</option>
+                      <option value="claimed">Claimed status</option>
+                    </select>
                   </div>
                 </div>
-              )}
-            </>
+
+                <div>
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold text-stone-700">
+                      Found {carriers.length} approved waste carriers
+                      {searchQuery && <span className="font-normal text-base"> matching "{searchQuery}"</span>}
+                    </h3>
+                  </div>
+
+                  <div className="mb-8">
+                    <h4 className="text-base font-semibold text-stone-600 mb-3 border-b pb-1">
+                      Available Providers
+                    </h4>
+                    
+                    <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
+                      {carriers.map((carrier, index) => (
+                        <div key={carrier.registrationNumber + index} className="relative flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 rounded-lg border border-stone-200 h-full bg-white">
+                          <div className="flex-grow p-4">
+                            <div className="mb-3">
+                              <h3 className="font-semibold text-lg text-stone-800 mb-1">
+                                {carrier.name}
+                              </h3>
+                            </div>
+                            
+                            <div className="mb-3">
+                              <div className="text-sm mb-1">
+                                <span className="font-medium text-stone-500">Registration:</span>
+                                <span className="text-stone-700 ml-1">{carrier.registrationNumber}</span>
+                              </div>
+                              {carrier.expiryDate && (
+                                <div className="text-sm">
+                                  <span className="font-medium text-stone-500">Expires:</span>
+                                  <span className="text-stone-700 ml-1">
+                                    {new Date(carrier.expiryDate).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="text-sm text-stone-600">
+                              <div className="mb-1">
+                                <span className="font-medium text-stone-500">Address:</span>
+                                <span className="ml-1">{carrier.address}</span>
+                              </div>
+                              <div className="flex flex-wrap gap-4">
+                                {carrier.address.split(',').length > 2 && (
+                                  <span>
+                                    <span className="font-medium text-stone-500">Town:</span>
+                                    <span className="ml-1">{carrier.address.split(',').slice(-2, -1)[0]?.trim() || 'N/A'}</span>
+                                  </span>
+                                )}
+                                {carrier.postcode && (
+                                  <span>
+                                    <span className="font-medium text-stone-500">Postcode:</span>
+                                    <span className="ml-1">{carrier.postcode}</span>
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center bg-stone-50 p-3 border-t mt-auto">
+                            <Link 
+                              to={`/provider/${carrier.registrationNumber}`}
+                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium h-9 rounded-md px-3 bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                            >
+                              Claim This Listing
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-8 flex justify-center">
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        className="h-9 rounded-md px-3"
+                        onClick={() => setOffset(Math.max(0, offset - limit))}
+                        disabled={loading || offset === 0}
+                      >
+                        Previous
+                      </Button>
+                      
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((page) => (
+                          <Button
+                            key={page}
+                            variant={page === 3 ? "default" : "outline"}
+                            className={page === 3 ? "bg-blue-600 hover:bg-blue-700 text-white h-9 rounded-md px-3" : "h-9 rounded-md px-3"}
+                            onClick={() => setOffset((page - 1) * limit)}
+                            disabled={loading}
+                          >
+                            {page}
+                          </Button>
+                        ))}
+                        
+                        <span className="px-1">...</span>
+                        
+                        <Button
+                          variant="outline"
+                          className="h-9 rounded-md px-3"
+                          disabled={loading}
+                        >
+                          331
+                        </Button>
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        className="h-9 rounded-md px-3"
+                        onClick={handleLoadMore}
+                        disabled={loading}
+                      >
+                        {loading ? 'Loading...' : 'Next'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
