@@ -55,13 +55,13 @@ export const DirectorySection = () => {
   
   return (
     <>
-      <section id="directory-section" className="bg-primary py-16">
+      <section id="directory-section" className="bg-[#33613a] py-6 md:py-8 text-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto mb-10">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 text-center">
+          <div className="max-w-2xl mx-auto mb-6 md:mb-10">
+            <h1 className="text-2xl md:text-[1.875rem] font-bold text-white mb-2 leading-8 md:leading-9">
               UK Licensed Rubbish Removal Directory
             </h1>
-            <p className="text-white/90 text-lg mb-6 text-center">
+            <p className="text-[#E1FFDA] mb-4 md:mb-6">
               {carriers.length > 0 ? `${carriers.length}+ licensed rubbish removal services found` : 'Search for licensed rubbish removal services'}
               {searchQuery && <> in {searchQuery}</>}
             </p>
