@@ -46,21 +46,29 @@ export const useWasteCarrierDetail = (registrationNumber: string) => {
           throw new Error('Carrier not found');
         }
 
-        const regNumber = item.registrationNumber || item.registration?.registrationNumber || registrationNumber;
+        // Helper function to extract string value from API response
+        const extractValue = (field: any): string => {
+          if (typeof field === 'string') return field;
+          if (field?.label) return field.label;
+          if (field?.['@id']) return field['@id'];
+          return '';
+        };
+
+        const regNumber = extractValue(item.registrationNumber || item.registration?.registrationNumber) || registrationNumber;
         const tier = regNumber.startsWith('CBDU') ? 'Upper' : 'Lower';
 
         setCarrier({
           registrationNumber: regNumber,
-          name: item.name || item.businessName || 'Unknown',
-          address: item.address || item.postalAddress || 'Address not available',
-          postcode: item.postcode || '',
-          registrationType: item.registrationType || 'Carrier, Broker, Dealer',
+          name: extractValue(item.name || item.businessName) || 'Unknown',
+          address: extractValue(item.address || item.postalAddress) || 'Address not available',
+          postcode: extractValue(item.postcode) || '',
+          registrationType: extractValue(item.registrationType) || 'Carrier, Broker, Dealer',
           tier,
-          registrationDate: item.registrationDate || item.dateRegistered,
-          expiryDate: item.expiryDate || item.dateExpires,
-          companyNumber: item.companyNumber,
-          phone: item.phoneNumber || item.phone,
-          email: item.email || item.emailAddress,
+          registrationDate: extractValue(item.registrationDate || item.dateRegistered),
+          expiryDate: extractValue(item.expiryDate || item.dateExpires),
+          companyNumber: extractValue(item.companyNumber),
+          phone: extractValue(item.phoneNumber || item.phone),
+          email: extractValue(item.email || item.emailAddress),
         });
       } catch (err) {
         console.error('Error fetching carrier detail:', err);
