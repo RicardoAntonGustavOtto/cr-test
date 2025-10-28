@@ -1,16 +1,20 @@
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, MapPin } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useWasteCarriers } from "@/hooks/useWasteCarriers";
 
 export const DirectorySection = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [offset, setOffset] = useState(0);
+  const [searchType, setSearchType] = useState("location");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState("relevant");
   const limit = 20;
 
   const { carriers, loading, total } = useWasteCarriers({
@@ -19,6 +23,19 @@ export const DirectorySection = () => {
     offset,
   });
 
+  const serviceFilters = [
+    "Household Waste",
+    "Garden Waste", 
+    "Construction Waste",
+    "Commercial Waste",
+    "Hazardous Waste",
+    "Electronic Waste",
+    "Metal Waste",
+    "Furniture Removal",
+    "Skip Hire",
+    "Recycling Services"
+  ];
+
   const handleSearch = () => {
     setSearchQuery(searchInput);
     setOffset(0);
@@ -26,6 +43,14 @@ export const DirectorySection = () => {
 
   const handleLoadMore = () => {
     setOffset(prev => prev + limit);
+  };
+
+  const toggleFilter = (filter: string) => {
+    setSelectedFilters(prev => 
+      prev.includes(filter) 
+        ? prev.filter(f => f !== filter)
+        : [...prev, filter]
+    );
   };
   
   return (
@@ -41,8 +66,20 @@ export const DirectorySection = () => {
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-4 mb-10">
-          <div className="flex gap-3">
+        <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-5 mb-6">
+          <div className="flex gap-3 mb-4">
+            <Select value={searchType} onValueChange={setSearchType}>
+              <SelectTrigger className="w-40">
+                <MapPin className="w-4 h-4 mr-2" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="location">Location</SelectItem>
+                <SelectItem value="business">Business Name</SelectItem>
+                <SelectItem value="registration">Registration No.</SelectItem>
+              </SelectContent>
+            </Select>
+            
             <Input
               placeholder="london"
               className="flex-1 border-gray-300"
@@ -63,6 +100,68 @@ export const DirectorySection = () => {
               Search
             </Button>
           </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Filter by Services:</p>
+            <div className="flex flex-wrap gap-2">
+              {serviceFilters.map((filter) => (
+                <Badge
+                  key={filter}
+                  variant={selectedFilters.includes(filter) ? "default" : "outline"}
+                  className={`cursor-pointer hover:bg-primary/10 transition-colors ${
+                    selectedFilters.includes(filter) 
+                      ? "bg-primary text-white" 
+                      : "bg-white text-foreground border-gray-300"
+                  }`}
+                  onClick={() => toggleFilter(filter)}
+                >
+                  {filter}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto mb-8">
+          {carriers.length > 0 && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h2 className="text-2xl font-bold text-foreground">
+                      Rubbish Removal & Clearance Services: London
+                    </h2>
+                    <Badge className="bg-secondary text-white">
+                      ✓ EA Registered
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    All providers are Environment Agency registered for legal waste disposal.
+                  </p>
+                  <p className="text-foreground font-semibold">
+                    Found {carriers.length} approved waste carriers
+                    {searchQuery && <> matching "{searchQuery}"</>}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Available Providers
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Sort by:</span>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="relevant">Most relevant</SelectItem>
+                      <SelectItem value="name">Name A-Z</SelectItem>
+                      <SelectItem value="expiry">Expiry Date</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="max-w-7xl mx-auto">
@@ -80,7 +179,7 @@ export const DirectorySection = () => {
             <>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
                 {carriers.map((carrier, index) => (
-                  <Card key={carrier.registrationNumber + index} className="bg-white hover:shadow-xl transition-all">
+                  <Card key={carrier.registrationNumber + index} className="bg-white hover:shadow-xl transition-all border">
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg font-bold text-foreground leading-tight">
                         {carrier.name}
@@ -103,14 +202,19 @@ export const DirectorySection = () => {
                           <span className="font-semibold text-foreground">Address:</span> {carrier.address}
                         </p>
                         {carrier.postcode && (
-                          <p className="text-muted-foreground">
-                            <span className="font-semibold text-foreground">Postcode:</span> {carrier.postcode}
-                          </p>
+                          <>
+                            <p className="text-muted-foreground">
+                              <span className="font-semibold text-foreground">Town:</span> {carrier.address.split(',').slice(-2, -1)[0]?.trim() || 'N/A'}
+                            </p>
+                            <p className="text-muted-foreground">
+                              <span className="font-semibold text-foreground">Postcode:</span> {carrier.postcode}
+                            </p>
+                          </>
                         )}
                       </div>
 
                       <Link to={`/provider/${carrier.registrationNumber}`}>
-                        <Button className="w-full mt-4 bg-primary hover:bg-primary/90 text-white">
+                        <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white">
                           Claim This Listing
                         </Button>
                       </Link>
