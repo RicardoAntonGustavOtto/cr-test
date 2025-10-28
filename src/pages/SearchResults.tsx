@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import { QuoteForm } from "@/components/QuoteForm";
 import { DirectorySection } from "@/components/DirectorySection";
+import Footer from "@/components/Footer";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -64,6 +65,8 @@ const SearchResults = () => {
       </section>
 
       <DirectorySection />
+      
+      <Footer />
     </div>
   );
 };

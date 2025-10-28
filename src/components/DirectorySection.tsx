@@ -225,21 +225,54 @@ export const DirectorySection = () => {
 
               {carriers.length >= limit && (
                 <div className="text-center">
-                  <Button 
-                    variant="outline" 
-                    className="bg-white hover:bg-white/90 text-foreground px-8 py-6"
-                    onClick={handleLoadMore}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Loading more...
-                      </>
-                    ) : (
-                      'Load More Results'
-                    )}
-                  </Button>
+                  <div className="flex justify-center items-center gap-2 mb-4">
+                    <Button 
+                      variant="outline" 
+                      className="bg-white hover:bg-gray-100 text-foreground px-6"
+                      onClick={() => setOffset(Math.max(0, offset - limit))}
+                      disabled={loading || offset === 0}
+                    >
+                      Previous
+                    </Button>
+                    
+                    {[1, 2, 3, 4, 5].map((page) => (
+                      <Button
+                        key={page}
+                        variant={page === 3 ? "default" : "outline"}
+                        className={page === 3 ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-white hover:bg-gray-100 text-foreground"}
+                        onClick={() => setOffset((page - 1) * limit)}
+                        disabled={loading}
+                      >
+                        {page}
+                      </Button>
+                    ))}
+                    
+                    <span className="text-white px-2">...</span>
+                    
+                    <Button
+                      variant="outline"
+                      className="bg-white hover:bg-gray-100 text-foreground"
+                      disabled={loading}
+                    >
+                      331
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      className="bg-white hover:bg-gray-100 text-foreground px-6"
+                      onClick={handleLoadMore}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Loading...
+                        </>
+                      ) : (
+                        'Next'
+                      )}
+                    </Button>
+                  </div>
                 </div>
               )}
             </>
