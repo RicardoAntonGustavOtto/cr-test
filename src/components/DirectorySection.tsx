@@ -69,9 +69,9 @@ export const DirectorySection = () => {
 
             <div className="bg-white rounded-lg shadow-lg p-2 mb-4">
               <div className="flex flex-col sm:flex-row gap-2">
-                <div className="hidden sm:block">
+                <div>
                   <Select value={searchType} onValueChange={setSearchType}>
-                    <SelectTrigger className="w-[180px] h-12 bg-white border-gray-300">
+                    <SelectTrigger className="w-full sm:w-[180px] h-12 bg-white border-gray-300">
                       <MapPin className="w-4 h-4 mr-2 text-gray-500" />
                       <SelectValue />
                     </SelectTrigger>
@@ -86,7 +86,13 @@ export const DirectorySection = () => {
                 <div className="flex-1 relative">
                   <MapPin className="w-[18px] h-[18px] absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" />
                   <Input
-                    placeholder="Enter town, city or postcode"
+                    placeholder={
+                      searchType === 'location' 
+                        ? "Enter town, city or postcode"
+                        : searchType === 'business'
+                        ? "Enter business name"
+                        : "Enter registration number"
+                    }
                     className="h-12 pl-10 bg-white border-gray-300 text-foreground placeholder:text-gray-400"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
