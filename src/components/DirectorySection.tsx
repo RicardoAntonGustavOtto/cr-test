@@ -1,6 +1,6 @@
 import { Search, Loader2, MapPin } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,13 +9,28 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useWasteCarriersDb } from "@/hooks/useWasteCarriersDb";
 
 export const DirectorySection = () => {
-  const [searchInput, setSearchInput] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const urlQuery = searchParams.get('q') || '';
+  const urlType = searchParams.get('type') || 'location';
+  
+  const [searchInput, setSearchInput] = useState(urlQuery);
+  const [searchQuery, setSearchQuery] = useState(urlQuery);
   const [offset, setOffset] = useState(0);
-  const [searchType, setSearchType] = useState("location");
+  const [searchType, setSearchType] = useState(urlType);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("relevant");
   const limit = 20;
+
+  // Initialize search from URL params
+  useEffect(() => {
+    if (urlQuery) {
+      setSearchInput(urlQuery);
+      setSearchQuery(urlQuery);
+    }
+    if (urlType) {
+      setSearchType(urlType);
+    }
+  }, [urlQuery, urlType]);
 
   const { carriers, loading, total } = useWasteCarriersDb({
     searchQuery,

@@ -19,9 +19,10 @@ export const SearchSection = () => {
   const [locationSearch, setLocationSearch] = useState("");
   const [businessSearch, setBusinessSearch] = useState("");
   const [licenseSearch, setLicenseSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("location");
 
-  const handleSearch = (query: string) => {
-    navigate(`/search-results?q=${encodeURIComponent(query)}`);
+  const handleSearch = (query: string, type: string) => {
+    navigate(`/search-results?q=${encodeURIComponent(query)}&type=${type}`);
   };
 
   return (
@@ -38,7 +39,7 @@ export const SearchSection = () => {
         </p>
 
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <Tabs defaultValue="location" className="w-full">
+          <Tabs defaultValue="location" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="location" className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
@@ -62,13 +63,13 @@ export const SearchSection = () => {
                   onChange={(e) => setLocationSearch(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && locationSearch.trim()) {
-                      handleSearch(locationSearch);
+                      handleSearch(locationSearch, 'location');
                     }
                   }}
                 />
                 <Button 
                   className="bg-secondary hover:bg-secondary/90"
-                  onClick={() => locationSearch.trim() && handleSearch(locationSearch)}
+                  onClick={() => locationSearch.trim() && handleSearch(locationSearch, 'location')}
                 >
                   <Search className="w-4 h-4 mr-2" />
                   Search
@@ -84,13 +85,13 @@ export const SearchSection = () => {
                   onChange={(e) => setBusinessSearch(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && businessSearch.trim()) {
-                      handleSearch(businessSearch);
+                      handleSearch(businessSearch, 'business');
                     }
                   }}
                 />
                 <Button 
                   className="bg-secondary hover:bg-secondary/90"
-                  onClick={() => businessSearch.trim() && handleSearch(businessSearch)}
+                  onClick={() => businessSearch.trim() && handleSearch(businessSearch, 'business')}
                 >
                   <Search className="w-4 h-4 mr-2" />
                   Search
@@ -106,13 +107,13 @@ export const SearchSection = () => {
                   onChange={(e) => setLicenseSearch(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && licenseSearch.trim()) {
-                      handleSearch(licenseSearch);
+                      handleSearch(licenseSearch, 'registration');
                     }
                   }}
                 />
                 <Button 
                   className="bg-secondary hover:bg-secondary/90"
-                  onClick={() => licenseSearch.trim() && handleSearch(licenseSearch)}
+                  onClick={() => licenseSearch.trim() && handleSearch(licenseSearch, 'registration')}
                 >
                   <Search className="w-4 h-4 mr-2" />
                   Search
@@ -128,7 +129,7 @@ export const SearchSection = () => {
             {popularLocations.map((location) => (
               <button
                 key={location}
-                onClick={() => handleSearch(location)}
+                onClick={() => handleSearch(location, 'location')}
                 className="flex items-center gap-1 text-white hover:text-secondary transition-colors"
               >
                 <MapPin className="w-4 h-4" />
