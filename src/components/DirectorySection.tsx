@@ -86,9 +86,9 @@ export const DirectorySection = () => {
               <div className="flex flex-col sm:flex-row gap-2">
                 <div>
                   <Select value={searchType} onValueChange={setSearchType}>
-                    <SelectTrigger className="w-full sm:w-[180px] h-12 bg-white border-gray-300">
+                    <SelectTrigger className="w-full sm:w-[180px] h-12 bg-white border-gray-300 text-foreground">
                       <MapPin className="w-4 h-4 mr-2 text-gray-500" />
-                      <SelectValue />
+                      <SelectValue placeholder="Search type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="location">Location</SelectItem>
