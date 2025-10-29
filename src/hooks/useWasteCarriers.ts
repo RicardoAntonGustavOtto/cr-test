@@ -13,12 +13,14 @@ export interface WasteCarrier {
 
 interface UseWasteCarriersParams {
   searchQuery?: string;
+  searchType?: 'location' | 'business' | 'registration';
   limit?: number;
   offset?: number;
 }
 
 export const useWasteCarriers = ({ 
-  searchQuery = '', 
+  searchQuery = '',
+  searchType = 'location',
   limit = 20, 
   offset = 0 
 }: UseWasteCarriersParams = {}) => {
@@ -31,14 +33,22 @@ export const useWasteCarriers = ({
       setLoading(true);
       try {
         // Build the API URL with parameters for our proxy
+        // For location searches, we need to fetch more results and filter client-side
+        const apiLimit = searchType === 'location' && searchQuery.trim() ? '100' : limit.toString();
+        
         const params = new URLSearchParams({
-          _limit: limit.toString(),
+          _limit: apiLimit,
           _offset: offset.toString(),
         });
 
-        // Add search query if provided
-        if (searchQuery.trim()) {
+        // Only use name-search for business name searches
+        if (searchQuery.trim() && searchType === 'business') {
           params.append('name-search', searchQuery);
+        }
+        
+        // For registration number searches
+        if (searchQuery.trim() && searchType === 'registration') {
+          params.append('registrationNumber', searchQuery);
         }
 
         const proxyUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/waste-carriers-proxy?${params}`;
@@ -54,11 +64,28 @@ export const useWasteCarriers = ({
         // Filter for Upper Tier only (registration numbers starting with CBDU)
         const items = data.items || [];
         
-        const upperTierCarriers = items
-          .filter((item: any) => {
-            const regNumber = item.registrationNumber || '';
-            return regNumber.startsWith('CBDU');
-          })
+        let filteredItems = items.filter((item: any) => {
+          const regNumber = item.registrationNumber || '';
+          return regNumber.startsWith('CBDU');
+        });
+
+        // Apply location filtering client-side if searching by location
+        if (searchType === 'location' && searchQuery.trim()) {
+          const searchTerm = searchQuery.toLowerCase().trim();
+          filteredItems = filteredItems.filter((item: any) => {
+            const siteAddress = item.site?.siteAddress;
+            const address = (siteAddress?.address || '').toLowerCase();
+            const locality = (siteAddress?.locality || '').toLowerCase();
+            const postcode = (siteAddress?.postcode || '').toLowerCase();
+            
+            return address.includes(searchTerm) || 
+                   locality.includes(searchTerm) || 
+                   postcode.includes(searchTerm);
+          });
+        }
+
+        const upperTierCarriers = filteredItems
+          .slice(0, limit) // Apply limit after filtering
           .map((item: any) => {
             const holderName = item.holder?.name || 'Unknown';
             const siteAddress = item.site?.siteAddress;
@@ -93,7 +120,7 @@ export const useWasteCarriers = ({
     };
 
     fetchCarriers();
-  }, [searchQuery, limit, offset]);
+  }, [searchQuery, searchType, limit, offset]);
 
   return { carriers, loading, total };
 };

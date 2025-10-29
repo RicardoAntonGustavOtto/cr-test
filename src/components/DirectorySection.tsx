@@ -19,6 +19,7 @@ export const DirectorySection = () => {
 
   const { carriers, loading, total } = useWasteCarriers({
     searchQuery,
+    searchType: searchType as 'location' | 'business' | 'registration',
     limit,
     offset,
   });
