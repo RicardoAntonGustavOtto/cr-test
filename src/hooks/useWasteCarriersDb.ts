@@ -17,13 +17,15 @@ interface UseWasteCarriersDbParams {
   searchType?: 'location' | 'business' | 'registration';
   limit?: number;
   offset?: number;
+  serviceFilters?: string[];
 }
 
 export const useWasteCarriersDb = ({ 
   searchQuery = '',
   searchType = 'location',
   limit = 20, 
-  offset = 0 
+  offset = 0,
+  serviceFilters = []
 }: UseWasteCarriersDbParams = {}) => {
   const [carriers, setCarriers] = useState<WasteCarrier[]>([]);
   const [loading, setLoading] = useState(false);
@@ -54,6 +56,11 @@ export const useWasteCarriersDb = ({
             // Search by registration number
             query = query.ilike('registration_number', `%${searchTerm}%`);
           }
+        }
+
+        // Apply service filters
+        if (serviceFilters.length > 0) {
+          query = query.overlaps('services', serviceFilters);
         }
 
         const { data, error, count } = await query;
@@ -88,7 +95,7 @@ export const useWasteCarriersDb = ({
     };
 
     fetchCarriers();
-  }, [searchQuery, searchType, limit, offset]);
+  }, [searchQuery, searchType, limit, offset, serviceFilters]);
 
   return { carriers, loading, total };
 };

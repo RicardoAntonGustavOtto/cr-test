@@ -37,6 +37,7 @@ export const DirectorySection = () => {
     searchType: searchType as 'location' | 'business' | 'registration',
     limit,
     offset,
+    serviceFilters: selectedFilters,
   });
 
   const serviceFilters = [
@@ -67,6 +68,7 @@ export const DirectorySection = () => {
         ? prev.filter(f => f !== filter)
         : [...prev, filter]
     );
+    setOffset(0); // Reset to first page when filters change
   };
   
   return (

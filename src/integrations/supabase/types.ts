@@ -30,6 +30,7 @@ export type Database = {
           registration_date: string | null
           registration_number: string
           registration_type: string | null
+          services: string[] | null
           tier: string
           updated_at: string | null
         }
@@ -48,6 +49,7 @@ export type Database = {
           registration_date?: string | null
           registration_number: string
           registration_type?: string | null
+          services?: string[] | null
           tier: string
           updated_at?: string | null
         }
@@ -66,6 +68,7 @@ export type Database = {
           registration_date?: string | null
           registration_number?: string
           registration_type?: string | null
+          services?: string[] | null
           tier?: string
           updated_at?: string | null
         }
