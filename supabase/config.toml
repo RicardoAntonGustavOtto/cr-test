@@ -2,3 +2,6 @@ project_id = "njlfqzktdtmqwoipuyxp"
 
 [functions.waste-carriers-proxy]
 verify_jwt = false
+
+[functions.sync-waste-carriers]
+verify_jwt = false

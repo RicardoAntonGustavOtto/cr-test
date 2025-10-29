@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useWasteCarriers } from "@/hooks/useWasteCarriers";
+import { useWasteCarriersDb } from "@/hooks/useWasteCarriersDb";
 
 export const DirectorySection = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -17,7 +17,7 @@ export const DirectorySection = () => {
   const [sortBy, setSortBy] = useState("relevant");
   const limit = 20;
 
-  const { carriers, loading, total } = useWasteCarriers({
+  const { carriers, loading, total } = useWasteCarriersDb({
     searchQuery,
     searchType: searchType as 'location' | 'business' | 'registration',
     limit,

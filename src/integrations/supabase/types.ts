@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      waste_carriers: {
+        Row: {
+          address: string
+          applicant_type: string | null
+          company_number: string | null
+          created_at: string | null
+          expiry_date: string | null
+          holder_name: string
+          id: string
+          is_claimed: boolean | null
+          last_synced_at: string | null
+          locality: string | null
+          postcode: string | null
+          registration_date: string | null
+          registration_number: string
+          registration_type: string | null
+          tier: string
+          updated_at: string | null
+        }
+        Insert: {
+          address: string
+          applicant_type?: string | null
+          company_number?: string | null
+          created_at?: string | null
+          expiry_date?: string | null
+          holder_name: string
+          id?: string
+          is_claimed?: boolean | null
+          last_synced_at?: string | null
+          locality?: string | null
+          postcode?: string | null
+          registration_date?: string | null
+          registration_number: string
+          registration_type?: string | null
+          tier: string
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string
+          applicant_type?: string | null
+          company_number?: string | null
+          created_at?: string | null
+          expiry_date?: string | null
+          holder_name?: string
+          id?: string
+          is_claimed?: boolean | null
+          last_synced_at?: string | null
+          locality?: string | null
+          postcode?: string | null
+          registration_date?: string | null
+          registration_number?: string
+          registration_type?: string | null
+          tier?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

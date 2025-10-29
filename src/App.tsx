@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import SearchResults from "./pages/SearchResults";
 import ProviderDetail from "./pages/ProviderDetail";
+import AdminSync from "./pages/AdminSync";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/search-results" element={<SearchResults />} />
           <Route path="/provider/:registrationNumber" element={<ProviderDetail />} />
+          <Route path="/admin/sync" element={<AdminSync />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
