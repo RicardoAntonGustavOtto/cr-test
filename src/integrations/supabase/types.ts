@@ -14,10 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
+      claim_requests: {
+        Row: {
+          areas_served: string | null
+          business_role: string
+          created_at: string
+          description: string | null
+          email: string
+          full_name: string
+          id: string
+          phone: string
+          registration_number: string
+          selected_plan: string
+          services: string[] | null
+          status: string
+          updated_at: string
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          areas_served?: string | null
+          business_role: string
+          created_at?: string
+          description?: string | null
+          email: string
+          full_name: string
+          id?: string
+          phone: string
+          registration_number: string
+          selected_plan: string
+          services?: string[] | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          areas_served?: string | null
+          business_role?: string
+          created_at?: string
+          description?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string
+          registration_number?: string
+          selected_plan?: string
+          services?: string[] | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          business_email: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          business_email?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          business_email?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       waste_carriers: {
         Row: {
           address: string
           applicant_type: string | null
+          claimed_at: string | null
+          claimed_by: string | null
           company_number: string | null
           created_at: string | null
           expiry_date: string | null
@@ -31,12 +114,16 @@ export type Database = {
           registration_number: string
           registration_type: string | null
           services: string[] | null
+          subscription_billing: string | null
+          subscription_plan: string | null
           tier: string
           updated_at: string | null
         }
         Insert: {
           address: string
           applicant_type?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           company_number?: string | null
           created_at?: string | null
           expiry_date?: string | null
@@ -50,12 +137,16 @@ export type Database = {
           registration_number: string
           registration_type?: string | null
           services?: string[] | null
+          subscription_billing?: string | null
+          subscription_plan?: string | null
           tier: string
           updated_at?: string | null
         }
         Update: {
           address?: string
           applicant_type?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           company_number?: string | null
           created_at?: string | null
           expiry_date?: string | null
@@ -69,10 +160,20 @@ export type Database = {
           registration_number?: string
           registration_type?: string | null
           services?: string[] | null
+          subscription_billing?: string | null
+          subscription_plan?: string | null
           tier?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "waste_carriers_claimed_by_fkey"
+            columns: ["claimed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

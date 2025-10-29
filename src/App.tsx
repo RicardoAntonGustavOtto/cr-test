@@ -8,6 +8,7 @@ import SearchResults from "./pages/SearchResults";
 import ProviderDetail from "./pages/ProviderDetail";
 import ClaimListing from "./pages/ClaimListing";
 import AdminSync from "./pages/AdminSync";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/provider/:registrationNumber" element={<ProviderDetail />} />
           <Route path="/claim/:registrationNumber" element={<ClaimListing />} />
           <Route path="/admin/sync" element={<AdminSync />} />
+          <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

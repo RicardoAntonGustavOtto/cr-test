@@ -3,7 +3,7 @@ import { useWasteCarrierDetail } from "@/hooks/useWasteCarrierDetail";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ClaimStepIndicator } from "@/components/claim/ClaimStepIndicator";
@@ -11,6 +11,7 @@ import { VerifyBusinessStep } from "@/components/claim/VerifyBusinessStep";
 import { AddDetailsStep } from "@/components/claim/AddDetailsStep";
 import { ChoosePlanStep } from "@/components/claim/ChoosePlanStep";
 import { CompleteStep } from "@/components/claim/CompleteStep";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface ClaimFormData {
   // Step 1
@@ -32,8 +33,16 @@ export interface ClaimFormData {
 const ClaimListing = () => {
   const { registrationNumber } = useParams();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const { carrier, loading } = useWasteCarrierDetail(registrationNumber || '');
   const [currentStep, setCurrentStep] = useState(1);
+
+  // Redirect to auth if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [user, authLoading, navigate]);
   
   const [formData, setFormData] = useState<ClaimFormData>({
     fullName: '',
@@ -56,7 +65,7 @@ const ClaimListing = () => {
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />

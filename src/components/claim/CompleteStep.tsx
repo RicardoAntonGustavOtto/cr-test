@@ -6,6 +6,8 @@ import { WasteCarrierDetail } from "@/hooks/useWasteCarrierDetail";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface CompleteStepProps {
   carrier: WasteCarrierDetail;
@@ -14,16 +16,46 @@ interface CompleteStepProps {
 
 export const CompleteStep = ({ carrier, formData }: CompleteStepProps) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
-    // TODO: Submit claim data to backend
-    console.log('Claim submission:', { carrier, formData });
-    
-    toast({
-      title: "Claim Request Submitted Successfully!",
-      description: "We'll review your request and get back to you within 2 business days.",
-    });
-  }, [carrier, formData]);
+    const submitClaim = async () => {
+      if (!user) return;
+
+      try {
+        const { error } = await supabase.from('claim_requests').insert({
+          registration_number: carrier.registrationNumber,
+          user_id: user.id,
+          full_name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          business_role: formData.businessRole,
+          website: formData.website || null,
+          description: formData.description || null,
+          services: formData.services.length > 0 ? formData.services : null,
+          areas_served: formData.areasServed || null,
+          selected_plan: formData.selectedPlan,
+          status: 'pending',
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Claim Request Submitted Successfully!",
+          description: "We'll review your request and get back to you within 2 business days.",
+        });
+      } catch (error) {
+        console.error('Error submitting claim:', error);
+        toast({
+          title: "Submission Error",
+          description: "There was an issue submitting your claim. Please try again.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    submitClaim();
+  }, [carrier, formData, user]);
 
   return (
     <Card className="text-center">
