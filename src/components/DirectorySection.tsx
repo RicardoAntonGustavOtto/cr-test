@@ -262,7 +262,7 @@ export const DirectorySection = () => {
                           
                           <div className="flex items-center bg-stone-50 p-3 border-t mt-auto">
                             <Link 
-                              to={`/provider/${carrier.registrationNumber}`}
+                              to={`/claim/${carrier.registrationNumber}`}
                               className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium h-9 rounded-md px-3 bg-blue-600 hover:bg-blue-700 text-white transition-colors"
                             >
                               Claim This Listing
