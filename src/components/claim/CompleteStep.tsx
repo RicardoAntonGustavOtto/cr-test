@@ -43,9 +43,10 @@ export const CompleteStep = ({ carrier, formData }: CompleteStepProps) => {
           });
 
           if (signUpError) {
+            console.error('Signup error:', signUpError);
             toast({
               title: "Account Creation Failed",
-              description: signUpError.message,
+              description: signUpError.message || "Please check your password meets requirements (at least 6 characters)",
               variant: "destructive",
             });
             setIsSubmitting(false);

@@ -147,10 +147,10 @@ export const VerifyBusinessStep = ({
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  minLength={8}
+                  minLength={6}
                 />
                 <p className="text-xs text-muted-foreground">
-                  Minimum 8 characters for account security
+                  Must be at least 6 characters long
                 </p>
               </div>
 
