@@ -33,16 +33,9 @@ export interface ClaimFormData {
 const ClaimListing = () => {
   const { registrationNumber } = useParams();
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const { carrier, loading } = useWasteCarrierDetail(registrationNumber || '');
   const [currentStep, setCurrentStep] = useState(1);
-
-  // Redirect to auth if not logged in
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth');
-    }
-  }, [user, authLoading, navigate]);
   
   const [formData, setFormData] = useState<ClaimFormData>({
     fullName: '',
@@ -65,7 +58,7 @@ const ClaimListing = () => {
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
-  if (loading || authLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
