@@ -180,7 +180,7 @@ export const DirectorySection = () => {
                 <div>
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-stone-700">
-                      Found {carriers.length} approved waste carriers
+                      Found {total} approved waste carriers
                       {searchQuery && <span className="font-normal text-base"> matching "{searchQuery}"</span>}
                     </h3>
                   </div>
@@ -251,49 +251,87 @@ export const DirectorySection = () => {
                   </div>
 
                   <div className="mt-8 flex justify-center">
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        className="h-9 rounded-md px-3"
-                        onClick={() => setOffset(Math.max(0, offset - limit))}
-                        disabled={loading || offset === 0}
-                      >
-                        Previous
-                      </Button>
+                    {(() => {
+                      const currentPage = Math.floor(offset / limit) + 1;
+                      const totalPages = Math.ceil(total / limit);
+                      const maxPagesToShow = 5;
                       
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((page) => (
+                      let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+                      let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+                      
+                      if (endPage - startPage < maxPagesToShow - 1) {
+                        startPage = Math.max(1, endPage - maxPagesToShow + 1);
+                      }
+                      
+                      const pages = Array.from(
+                        { length: endPage - startPage + 1 },
+                        (_, i) => startPage + i
+                      );
+                      
+                      return (
+                        <div className="flex gap-2">
                           <Button
-                            key={page}
-                            variant={page === 3 ? "default" : "outline"}
-                            className={page === 3 ? "bg-blue-600 hover:bg-blue-700 text-white h-9 rounded-md px-3" : "h-9 rounded-md px-3"}
-                            onClick={() => setOffset((page - 1) * limit)}
-                            disabled={loading}
+                            variant="outline"
+                            className="h-9 rounded-md px-3"
+                            onClick={() => setOffset(Math.max(0, offset - limit))}
+                            disabled={loading || offset === 0}
                           >
-                            {page}
+                            Previous
                           </Button>
-                        ))}
-                        
-                        <span className="px-1">...</span>
-                        
-                        <Button
-                          variant="outline"
-                          className="h-9 rounded-md px-3"
-                          disabled={loading}
-                        >
-                          331
-                        </Button>
-                      </div>
-                      
-                      <Button
-                        variant="outline"
-                        className="h-9 rounded-md px-3"
-                        onClick={handleLoadMore}
-                        disabled={loading}
-                      >
-                        {loading ? 'Loading...' : 'Next'}
-                      </Button>
-                    </div>
+                          
+                          <div className="flex items-center gap-1">
+                            {startPage > 1 && (
+                              <>
+                                <Button
+                                  variant="outline"
+                                  className="h-9 rounded-md px-3"
+                                  onClick={() => setOffset(0)}
+                                  disabled={loading}
+                                >
+                                  1
+                                </Button>
+                                {startPage > 2 && <span className="px-1">...</span>}
+                              </>
+                            )}
+                            
+                            {pages.map((page) => (
+                              <Button
+                                key={page}
+                                variant={page === currentPage ? "default" : "outline"}
+                                className={page === currentPage ? "bg-blue-600 hover:bg-blue-700 text-white h-9 rounded-md px-3" : "h-9 rounded-md px-3"}
+                                onClick={() => setOffset((page - 1) * limit)}
+                                disabled={loading}
+                              >
+                                {page}
+                              </Button>
+                            ))}
+                            
+                            {endPage < totalPages && (
+                              <>
+                                {endPage < totalPages - 1 && <span className="px-1">...</span>}
+                                <Button
+                                  variant="outline"
+                                  className="h-9 rounded-md px-3"
+                                  onClick={() => setOffset((totalPages - 1) * limit)}
+                                  disabled={loading}
+                                >
+                                  {totalPages}
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                          
+                          <Button
+                            variant="outline"
+                            className="h-9 rounded-md px-3"
+                            onClick={handleLoadMore}
+                            disabled={loading || offset + limit >= total}
+                          >
+                            {loading ? 'Loading...' : 'Next'}
+                          </Button>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
