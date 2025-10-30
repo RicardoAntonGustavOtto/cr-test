@@ -1,5 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -35,82 +33,108 @@ const carriers = [
 
 const FeaturedCarriers = () => {
   return (
-    <section className="py-16 bg-gradient-to-b from-muted/30 to-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
+    <div className="bg-[#72b337]/80 pb-16 pt-16">
+      <div className="container mx-auto px-4 py-12">
+        <div className="mb-8 text-center">
+          <h2 className="text-4xl font-bold text-[#1a1a1a] mb-3">
             Featured Waste Carriers
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-[#1a1a1a]/90 max-w-xl pb-4 mx-auto">
             A selection of licensed carriers from our directory.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {carriers.map((carrier) => (
-            <Card key={carrier.registration} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-4 min-h-[56px]">
-                  {carrier.name}
-                </h3>
-                
-                <div className="space-y-2 mb-4 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Registration:</span>
-                    <span className="font-medium">{carrier.registration}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Expires:</span>
-                    <span className="font-medium">{carrier.expires}</span>
-                  </div>
-                </div>
+            <div
+              key={carrier.registration}
+              className="text-card-foreground shadow-sm flex flex-col overflow-hidden rounded-lg border border-stone-200 h-full bg-white transition-all duration-300 ease-in-out hover:bg-[#1f502e]/95 hover:border-[#1f502e] group"
+            >
+              <div className="flex-grow p-4">
+                <div className="flex gap-4">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-lg leading-tight text-stone-800 truncate group-hover:text-white transition-colors duration-300">
+                      {carrier.name}
+                    </h3>
 
-                <div className="text-sm mb-4">
-                  <p className="text-muted-foreground">{carrier.address}</p>
-                  <p className="font-medium">{carrier.postcode}</p>
-                </div>
+                    <div className="mt-2 space-y-1">
+                      <div>
+                        <span className="font-medium text-stone-500 group-hover:text-green-100 transition-colors duration-300">
+                          Registration:
+                        </span>
+                        <span className="text-stone-700 ml-1 group-hover:text-white transition-colors duration-300">
+                          {carrier.registration}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-stone-500 group-hover:text-green-100 transition-colors duration-300">
+                          Expires:
+                        </span>
+                        <span className="text-stone-700 ml-1 group-hover:text-white transition-colors duration-300">
+                          {carrier.expires}
+                        </span>
+                      </div>
+                    </div>
 
-                {carrier.services.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {carrier.services.map((service) => (
-                      <span
-                        key={service}
-                        className="px-2 py-1 bg-secondary/10 text-secondary text-xs rounded"
+                    <div className="mt-2">
+                      <div className="text-sm text-stone-600 group-hover:text-green-100 transition-colors duration-300 line-clamp-2">
+                        {carrier.address}
+                      </div>
+                      <div className="text-sm text-stone-700 font-medium group-hover:text-white transition-colors duration-300 mt-1">
+                        {carrier.postcode}
+                      </div>
+                    </div>
+
+                    {carrier.services.length > 0 && (
+                      <div className="mt-3">
+                        <div className="flex flex-wrap gap-1.5">
+                          {carrier.services.map((service) => (
+                            <span
+                              key={service}
+                              className="inline-block px-2 py-0.5 text-xs bg-[#33613a]/10 text-[#33613a] rounded group-hover:bg-white/10 group-hover:text-white transition-colors duration-300"
+                            >
+                              {service}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-2 flex items-center gap-2 truncate">
+                      <Phone className="w-[14px] h-[14px] text-stone-400 flex-shrink-0 group-hover:text-white transition-colors duration-300" />
+                      <a
+                        href={`tel:${carrier.phone}`}
+                        className="text-blue-600 text-sm leading-tight group-hover:text-white transition-colors duration-300"
                       >
-                        {service}
-                      </span>
-                    ))}
+                        {carrier.phone}
+                      </a>
+                    </div>
                   </div>
-                )}
-
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    asChild
-                  >
-                    <a href={`tel:${carrier.phone}`}>
-                      <Phone className="w-4 h-4 mr-2" />
-                      {carrier.phone}
-                    </a>
-                  </Button>
                 </div>
+              </div>
 
-                <Button
-                  className="w-full mt-3 bg-primary hover:bg-primary/90"
-                  asChild
+              <div className="flex items-center bg-stone-50/50 p-3 border-t mt-auto group-hover:bg-[#1f502e]/80 group-hover:border-[#1f502e]/80 transition-colors duration-300">
+                <Link
+                  to={`/provider/${carrier.registration}`}
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-md px-3 w-full bg-[#72b337] hover:bg-[#72b337]/90 text-white h-9 text-sm font-semibold transition-colors duration-300"
                 >
-                  <Link to={`/provider/${carrier.registration}`}>
-                    View Details
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+                  View Details
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
+
+        <div className="mt-12 text-center">
+          <Link
+            to="/search-results"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-11 rounded-md px-8 bg-[#1f502e] hover:bg-[#1f502e]/90 transition-colors duration-300"
+          >
+            View Full Directory
+          </Link>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

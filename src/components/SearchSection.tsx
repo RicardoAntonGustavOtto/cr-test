@@ -1,8 +1,5 @@
-import { MapPin, FileText, CreditCard, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link, useNavigate } from "react-router-dom";
+import { MapPin, FileText, Building, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const popularLocations = [
@@ -17,122 +14,111 @@ const popularLocations = [
 export const SearchSection = () => {
   const navigate = useNavigate();
   const [locationSearch, setLocationSearch] = useState("");
-  const [businessSearch, setBusinessSearch] = useState("");
-  const [licenseSearch, setLicenseSearch] = useState("");
   const [activeTab, setActiveTab] = useState("location");
 
   const handleSearch = (query: string, type: string) => {
-    navigate(`/search-results?q=${encodeURIComponent(query)}&type=${type}`);
+    navigate(`/search-results?query=${encodeURIComponent(query)}&type=${type}`);
   };
 
   return (
-    <section className="bg-primary py-16">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
-          UK's Approved Waste Carriers
-        </h1>
-        <p className="text-xl text-white/90 text-center mb-2">
-          Find verified waste removal specialists and check licenses.
-        </p>
-        <p className="text-white/80 text-center mb-8">
-          All providers are Environment Agency approved with valid certificates.
-        </p>
-
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <Tabs defaultValue="location" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6">
-              <TabsTrigger value="location" className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                Location
-              </TabsTrigger>
-              <TabsTrigger value="business" className="flex items-center gap-2">
-                <FileText className="w-4 h-4" />
-                Business Name
-              </TabsTrigger>
-              <TabsTrigger value="license" className="flex items-center gap-2">
-                <CreditCard className="w-4 h-4" />
-                License No.
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="location">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Enter town, city, or postcode..."
-                  className="flex-1"
-                  value={locationSearch}
-                  onChange={(e) => setLocationSearch(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && locationSearch.trim()) {
-                      handleSearch(locationSearch, 'location');
-                    }
-                  }}
-                />
-                <Button 
-                  className="bg-secondary hover:bg-secondary/90"
-                  onClick={() => locationSearch.trim() && handleSearch(locationSearch, 'location')}
-                >
-                  <Search className="w-4 h-4 mr-2" />
-                  Search
-                </Button>
-              </div>
-            </TabsContent>
-            <TabsContent value="business">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Enter business name..."
-                  className="flex-1"
-                  value={businessSearch}
-                  onChange={(e) => setBusinessSearch(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && businessSearch.trim()) {
-                      handleSearch(businessSearch, 'business');
-                    }
-                  }}
-                />
-                <Button 
-                  className="bg-secondary hover:bg-secondary/90"
-                  onClick={() => businessSearch.trim() && handleSearch(businessSearch, 'business')}
-                >
-                  <Search className="w-4 h-4 mr-2" />
-                  Search
-                </Button>
-              </div>
-            </TabsContent>
-            <TabsContent value="license">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Enter license number..."
-                  className="flex-1"
-                  value={licenseSearch}
-                  onChange={(e) => setLicenseSearch(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && licenseSearch.trim()) {
-                      handleSearch(licenseSearch, 'registration');
-                    }
-                  }}
-                />
-                <Button 
-                  className="bg-secondary hover:bg-secondary/90"
-                  onClick={() => licenseSearch.trim() && handleSearch(licenseSearch, 'registration')}
-                >
-                  <Search className="w-4 h-4 mr-2" />
-                  Search
-                </Button>
-              </div>
-            </TabsContent>
-          </Tabs>
+    <section className="pt-12 pb-28 bg-gradient-to-b from-[#1f502e] to-[#1f502e]/90 text-white">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto text-center mb-10">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+            UK's Approved Waste Carriers
+          </h1>
+          <p className="text-green-100 text-lg mb-1 opacity-90">
+            Find verified waste removal specialists and check licenses.
+          </p>
+          <p className="text-green-100 text-base opacity-80">
+            All providers are Environment Agency approved with valid certificates.
+          </p>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-white/90 mb-3">Popular location searches:</p>
-          <div className="flex flex-wrap justify-center gap-3">
+        <div className="bg-white p-5 sm:p-6 rounded-lg shadow-lg max-w-2xl mx-auto text-left">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (locationSearch.trim()) {
+                handleSearch(locationSearch, 'location');
+              }
+            }}
+          >
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveTab("location")}
+                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 flex-1 min-w-[120px] justify-center h-11 text-sm sm:text-base ${
+                  activeTab === "location"
+                    ? "bg-[#1f502e] text-white hover:bg-[#1f502e]/90 border-[#1f502e]"
+                    : "text-waste-neutral-700 border-waste-neutral-300 bg-white hover:bg-waste-neutral-100 hover:text-waste-neutral-800 border"
+                }`}
+              >
+                <MapPin className="w-4 h-4 mr-2" />
+                Location
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("business")}
+                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 flex-1 min-w-[120px] justify-center h-11 text-sm sm:text-base ${
+                  activeTab === "business"
+                    ? "bg-[#1f502e] text-white hover:bg-[#1f502e]/90 border-[#1f502e]"
+                    : "text-waste-neutral-700 border-waste-neutral-300 bg-white hover:bg-waste-neutral-100 hover:text-waste-neutral-800 border"
+                }`}
+              >
+                <Building className="w-4 h-4 mr-2" />
+                Business Name
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("license")}
+                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 flex-1 min-w-[120px] justify-center h-11 text-sm sm:text-base ${
+                  activeTab === "license"
+                    ? "bg-[#1f502e] text-white hover:bg-[#1f502e]/90 border-[#1f502e]"
+                    : "text-waste-neutral-700 border-waste-neutral-300 bg-white hover:bg-waste-neutral-100 hover:text-waste-neutral-800 border"
+                }`}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                License No.
+              </button>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-grow">
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-waste-neutral-400 w-[18px] h-[18px]" />
+                <input
+                  type="text"
+                  className="flex rounded-md border px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm h-12 pl-10 w-full text-base border-waste-neutral-300 bg-white text-waste-neutral-900 placeholder:text-waste-neutral-500 focus-visible:ring-[#72b337] focus-visible:border-[#72b337] !text-black"
+                  placeholder="Enter town, city, or postcode..."
+                  aria-label="Search by Location"
+                  value={locationSearch}
+                  onChange={(e) => setLocationSearch(e.target.value)}
+                  style={{ color: "rgb(0, 0, 0)" }}
+                />
+              </div>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground py-2 h-12 w-full sm:w-auto bg-[#72b337] hover:bg-[#72b337]/90 text-base px-6 flex-shrink-0"
+                aria-label="Submit search"
+              >
+                <Search className="w-[18px] h-[18px] mr-2" />
+                Search
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div className="text-center mt-8">
+          <p className="text-green-100 mb-2 text-sm">Popular location searches:</p>
+          <div className="flex flex-wrap justify-center gap-2">
             {popularLocations.map((location) => (
               <button
                 key={location}
                 onClick={() => handleSearch(location, 'location')}
-                className="flex items-center gap-1 text-white hover:text-secondary transition-colors"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 rounded-md text-green-100 hover:text-white hover:bg-[#72b337]/20 px-3"
               >
-                <MapPin className="w-4 h-4" />
+                <MapPin className="w-[14px] h-[14px] mr-1.5" />
                 {location}
               </button>
             ))}

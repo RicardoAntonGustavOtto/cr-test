@@ -115,7 +115,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/20 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
           <p className="text-white/70">
-            © 2025 CertifiedRubbish. Created by <a href="#" className="text-secondary hover:underline">Tiny</a>.
+            Created by <a href="https://tsunagilabs.com" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline">TsunagiLabs</a>
           </p>
           <div className="flex gap-6">
             <a href="#" className="text-white/70 hover:text-white transition-colors">
